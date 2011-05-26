@@ -24,9 +24,13 @@ setup(name='raptus.article.configuration',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'raptus.article.core',
           # -*- Extra requirements: -*-
       ],
       entry_points="""
       # -*- Entry points: -*-
+      
+      [z3c.autoinclude.plugin]
+      target = plone
       """,
       )
