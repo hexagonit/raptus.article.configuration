@@ -14,8 +14,8 @@ setup(name='raptus.article.configuration',
         "Programming Language :: Python",
         ],
       keywords='Plone Raptus Article',
-      author='Nejc Zupan',
-      author_email='nejc.zupan@niteoweb.com',
+      author='Nejc Zupan, NiteoWeb Ltd.',
+      author_email='nejc.zupan@gmail.com',
       url='http://svn.plone.org/svn/collective/',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
@@ -29,7 +29,7 @@ setup(name='raptus.article.configuration',
       ],
       entry_points="""
       # -*- Entry points: -*-
-      
+
       [z3c.autoinclude.plugin]
       target = plone
       """,
