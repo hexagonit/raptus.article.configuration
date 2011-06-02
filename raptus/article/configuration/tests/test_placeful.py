@@ -33,17 +33,32 @@ class TestGetAcqusitionChain(RAConfigurationIntegrationTestCase):
         self.portal.article.invokeFactory('Article', 'subarticle', title='Räptus Subarticlë')
         self.portal.article.subarticle.invokeFactory('Article', 'subsubarticle', title='Räptus Subsubarticlë')
 
-    def makePlacefulComponentsConfiguration(self):
+    def makePlacefulComponentsConfiguration(self, context):
         """Make an instance of PlacefulComponentsConfiguration"""
-        from raptus.article.core.componentfilter import ComponentFilter
-        context = mock.sentinel.context
-        request = mock.sentinel.request
-        view = mock.sentinel.view
-        return ComponentFilter(context, request, view)
+        from raptus.article.configuration.placeful import PlacefulComponentsConfiguration
+        return PlacefulComponentsConfiguration(context)
 
     def test_first_level_article(self):
-        """Test that Article implements IConfigurableArticle."""
-        self.assertTrue(IConfigurableArticle.providedBy(self.portal.article))
+        """Test that top-level Article has only itself in its acquisition
+        chain.
+        """
+        configuration = self.makePlacefulComponentsConfiguration(self.portal.article)
+        objects = configuration.getAcqusitionChain()
+        self.assertEquals('article'.split(), [o.id for o in objects])
+
+    def test_second_level_article(self):
+        """Test that second-level Article has itself and its parent
+        in its acquisition chain."""
+        configuration = self.makePlacefulComponentsConfiguration(self.portal.article.subarticle)
+        objects = configuration.getAcqusitionChain()
+        self.assertEquals('subarticle article'.split(), [o.id for o in objects])
+
+    def test_third_level_article(self):
+        """Test that third-level Article has itself and all its parents
+        in its acquisition chain."""
+        configuration = self.makePlacefulComponentsConfiguration(self.portal.article.subarticle.subsubarticle)
+        objects = configuration.getAcqusitionChain()
+        self.assertEquals('subsubarticle subarticle article'.split(), [o.id for o in objects])
 
 
 class TestIConfigurableArticle(RAConfigurationIntegrationTestCase):
