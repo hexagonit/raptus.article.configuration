@@ -26,7 +26,7 @@ class PlacefulComponentsConfiguration(object):
 
     def get(self, key, default=None):
         """Find the configuration key by looking first on context, then on all
-        parents in aquisition chain and lastly in portal_properties.
+        parents in acquisition chain and lastly in portal_properties.
         """
         # is this configuration key placefully on context or on some parent
         # in the aquisition chain?
@@ -45,7 +45,7 @@ class PlacefulComponentsConfiguration(object):
         """Returns a list of all context's parents up until to the portal root.
 
         :returns: Iterable of all parents from the direct parent to the site root
-        :return type: Generator of objects in context's acquisition chain
+        :return type: generator
         """
 
         # It is important to use inner to bootstrap the traverse,
