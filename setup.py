@@ -29,7 +29,6 @@ setup(name='raptus.article.configuration',
           'raptus.article.core',
           'setuptools',
           'unittest2',
-          # -*- Extra requirements: -*-
       ],
       entry_points="""
       # -*- Entry points: -*-
