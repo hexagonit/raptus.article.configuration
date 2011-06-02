@@ -57,7 +57,7 @@ class TestGetAcqusitionChain(RAConfigurationIntegrationTestCase):
         self.portal = self.layer['portal']
         self.request = self.layer['request']
 
-        # allow adding Subarticles to Articles
+        # allow adding subarticles to Articles
         portal_types = getToolByName(self.portal, 'portal_types')
         types = list(portal_types.Article.allowed_content_types)
         types.append('Article')
