@@ -12,6 +12,43 @@ from raptus.article.configuration.interfaces import IConfigurableArticle
 import unittest2 as unittest
 
 
+class TestDefault(RAConfigurationIntegrationTestCase):
+    """Test default value returns if configuration key is not found."""
+
+    def setUp(self):
+        """Custom shared utility setup for tests."""
+        self.portal = self.layer['portal']
+        self.request = self.layer['request']
+
+        # add initial test content
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        login(self.portal, TEST_USER_NAME)
+        self.portal.invokeFactory('Article', 'article', title='Räptus Articlë')
+
+    def makePlacefulComponentsConfiguration(self, context):
+        """Make an instance of PlacefulComponentsConfiguration"""
+        from raptus.article.configuration.placeful import PlacefulComponentsConfiguration
+        return PlacefulComponentsConfiguration(context)
+
+    def test_default_not_set(self):
+        """None is returned if key is not found and default is not set."""
+        configuration = self.makePlacefulComponentsConfiguration(self.portal.article)
+        self.assertEquals(None, configuration.get('foo'))
+
+    def test_default_set_as_positional_argument(self):
+        """Default value is returned if key is not found and default is set
+        as a positional argument.
+        """
+        configuration = self.makePlacefulComponentsConfiguration(self.portal.article)
+        self.assertEquals('bar', configuration.get('foo', 'bar'))
+
+    def test_default_set_as_keyword_argument(self):
+        """Default value is returned if key is not found and default is set
+        as a keyword argument."""
+        configuration = self.makePlacefulComponentsConfiguration(self.portal.article)
+        self.assertEquals('bar', configuration.get('foo', default='bar'))
+
+
 class TestGetAcqusitionChain(RAConfigurationIntegrationTestCase):
     """Test getting aquisition chain of content objects."""
 
