@@ -23,8 +23,12 @@ setup(name='raptus.article.configuration',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-          'setuptools',
+          'manuel',
+          'mock',
+          'plone.app.testing',
           'raptus.article.core',
+          'setuptools',
+          'unittest2',
           # -*- Extra requirements: -*-
       ],
       entry_points="""
