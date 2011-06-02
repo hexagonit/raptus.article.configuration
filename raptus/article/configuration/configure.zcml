@@ -1,0 +1,19 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    xmlns:five="http://namespaces.zope.org/five"
+    i18n_domain="raptus.article">
+
+    <five:registerPackage package="." />
+
+    <!-- Include configuration files of all setup.py dependencies -->
+    <includeDependencies package="." />
+
+    <adapter
+      factory=".placeful.PlacefulComponentsConfiguration" />
+
+    <class class="raptus.article.core.content.article.Article">
+        <implements interface=".interfaces.IConfigurableArticle" />
+    </class>
+
+</configure>
