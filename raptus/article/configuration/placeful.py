@@ -33,7 +33,7 @@ class PlacefulComponentsConfiguration(object):
         objects = self.getAcqusitionChain()
         for obj in objects:
             if obj.hasProperty(key):
-                logger.debug("Read configuration for %s from %s." % key, obj.absolute_url_path())
+                logger.debug("Read configuration for %s from %s." % (key, obj.absolute_url_path()))
                 return obj.getProperty(key, default)
 
         # as a fall-back, read configuration from portal_properties
