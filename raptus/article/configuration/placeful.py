@@ -11,6 +11,10 @@ from raptus.article.core.interfaces import IComponentsConfiguration
 from zope.component import adapts
 from zope.interface import implements
 
+import logging
+
+logger = logging.getLogger('raptus.article.configuration')
+
 
 class PlacefulComponentsConfiguration(object):
     """Provides lookup of placeful Components configuration."""
@@ -24,16 +28,17 @@ class PlacefulComponentsConfiguration(object):
         """Find the configuration key by looking first on context, then on all
         parents in aquisition chain and lastly in portal_properties.
         """
-
         # is this configuration key placefully on context or on some parent
         # in the aquisition chain?
         objects = self.getAcqusitionChain(self.context)
         for obj in objects:
             if obj.hasProperty(key):
+                logger.debug("Read configuration for %s from %s." % key, obj.absolute_url_path())
                 return obj.getProperty(key, default)
 
         # as a fall-back, read configuration from portal_properties
         props = getToolByName(self.context, 'portal_properties').raptus_article
+        logger.debug("Read configuration for %s from portal_properties." % key)
         return props.getProperty(key, default)
 
     def getAcqusitionChain(self, context):
