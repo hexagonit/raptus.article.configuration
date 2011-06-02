@@ -113,7 +113,7 @@ class TestDefault(RAConfigurationIntegrationTestCase):
         self.assertEquals('bar', configuration.get('foo', default='bar'))
 
 
-class TestGetAcqusitionChain(RAConfigurationIntegrationTestCase):
+class TestgetAcquisitionChain(RAConfigurationIntegrationTestCase):
     """Test getting aquisition chain of content objects."""
 
     def setUp(self):
@@ -144,21 +144,21 @@ class TestGetAcqusitionChain(RAConfigurationIntegrationTestCase):
         chain.
         """
         configuration = self.makePlacefulComponentsConfiguration(self.portal.article)
-        objects = configuration.getAcqusitionChain()
+        objects = configuration.getAcquisitionChain()
         self.assertEquals('article'.split(), [o.id for o in objects])
 
     def test_second_level_article(self):
         """Test that second-level Article has itself and its parent
         in its acquisition chain."""
         configuration = self.makePlacefulComponentsConfiguration(self.portal.article.subarticle)
-        objects = configuration.getAcqusitionChain()
+        objects = configuration.getAcquisitionChain()
         self.assertEquals('subarticle article'.split(), [o.id for o in objects])
 
     def test_third_level_article(self):
         """Test that third-level Article has itself and all its parents
         in its acquisition chain."""
         configuration = self.makePlacefulComponentsConfiguration(self.portal.article.subarticle.subsubarticle)
-        objects = configuration.getAcqusitionChain()
+        objects = configuration.getAcquisitionChain()
         self.assertEquals('subsubarticle subarticle article'.split(), [o.id for o in objects])
 
 

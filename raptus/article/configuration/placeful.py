@@ -30,7 +30,7 @@ class PlacefulComponentsConfiguration(object):
         """
         # is this configuration key placefully on context or on some parent
         # in the aquisition chain?
-        objects = self.getAcqusitionChain()
+        objects = self.getAcquisitionChain()
         for obj in objects:
             if obj.hasProperty(key):
                 logger.debug("Read configuration for %s from %s." % (key, obj.absolute_url_path()))
@@ -41,7 +41,7 @@ class PlacefulComponentsConfiguration(object):
         logger.debug("Read configuration for %s from portal_properties." % key)
         return props.getProperty(key, default)
 
-    def getAcqusitionChain(self):
+    def getAcquisitionChain(self):
         """Returns a list of all context's parents up until to the portal root.
 
         :returns: Iterable of all parents from the direct parent to the site root
