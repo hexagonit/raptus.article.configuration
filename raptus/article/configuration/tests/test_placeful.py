@@ -9,7 +9,71 @@ from Products.CMFCore.utils import getToolByName
 from raptus.article.configuration.tests.base import RAConfigurationIntegrationTestCase
 from raptus.article.configuration.interfaces import IConfigurableArticle
 
+import mock
 import unittest2 as unittest
+
+
+class TestGetConfiguration(RAConfigurationIntegrationTestCase):
+    """Test retrieving configuration values."""
+
+    def setUp(self):
+        """Custom shared utility setup for tests."""
+        self.portal = self.layer['portal']
+        self.request = self.layer['request']
+
+        # allow adding subarticles to Articles
+        portal_types = getToolByName(self.portal, 'portal_types')
+        types = list(portal_types.Article.allowed_content_types)
+        types.append('Article')
+        portal_types.Article.allowed_content_types = tuple(types)
+
+        # add initial test content
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        login(self.portal, TEST_USER_NAME)
+        self.portal.invokeFactory('Article', 'article', title='Räptus Articlë')
+        self.portal.article.invokeFactory('Article', 'subarticle', title='Räptus Subarticlë')
+
+    def makePlacefulComponentsConfiguration(self, context):
+        """Make an instance of PlacefulComponentsConfiguration"""
+        from raptus.article.configuration.placeful import PlacefulComponentsConfiguration
+        return PlacefulComponentsConfiguration(context)
+
+    @mock.patch('raptus.article.configuration.placeful.logger')
+    def test_get_from_context(self, logger):
+        """Start looking for configuration at context-level."""
+
+        # add configuration to portal_properties
+        self.portal.article.subarticle._setProperty('foo', 'bar')
+
+        configuration = self.makePlacefulComponentsConfiguration(self.portal.article.subarticle)
+        self.assertEquals('bar', configuration.get('foo', 'bar'))
+        logger.debug.assert_called_once_with('Read configuration for foo from /plone/article/subarticle.')
+
+    @mock.patch('raptus.article.configuration.placeful.logger')
+    def test_get_from_acquisition_parent(self, logger):
+        """Look for configuration in context's parents if it's not found
+        at context-level.
+        """
+
+        # add configuration to subarticle
+        self.portal.article._setProperty('foo', 'bar')
+
+        configuration = self.makePlacefulComponentsConfiguration(self.portal.article.subarticle)
+        self.assertEquals('bar', configuration.get('foo', 'bar'))
+        logger.debug.assert_called_once_with('Read configuration for foo from /plone/article.')
+
+    @mock.patch('raptus.article.configuration.placeful.logger')
+    def test_get_from_portal_properties(self, logger):
+        """As a fall-back, get configuration from portal_properties if
+        it's not found at context-level or any of context's parents.
+        """
+
+        # add configuration to portal_properties
+        self.portal.portal_properties.raptus_article._setProperty('foo', 'bar')
+
+        configuration = self.makePlacefulComponentsConfiguration(self.portal.article.subarticle)
+        self.assertEquals('bar', configuration.get('foo'))
+        logger.debug.assert_called_once_with('Read configuration for foo from portal_properties.')
 
 
 class TestDefault(RAConfigurationIntegrationTestCase):
