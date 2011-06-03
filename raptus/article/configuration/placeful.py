@@ -48,10 +48,10 @@ class PlacefulComponentsConfiguration(object):
         :return type: generator
         """
 
-        # It is important to use inner to bootstrap the traverse,
-        # or otherwise we might get surprising parents
+        # It is important to use aq_inner to bootstrap the traverse,
+        # otherwise we might get surprising parents
         # E.g. the context of the view has the view as the parent
-        # unless inner is used
+        # unless aq_inner is used
         obj = aq_inner(self.context)
 
         while obj is not None:
