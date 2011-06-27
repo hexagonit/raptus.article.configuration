@@ -15,7 +15,7 @@ install_requires = [
 setup(name='raptus.article.configuration',
       version=version,
       description="Placeful configuration for Raptus Article",
-      long_description=open("README.txt").read() + "\n" +
+      long_description=open("README.rst").read() + "\n" +
                        open(os.path.join("docs", "MANUAL.txt")).read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from
