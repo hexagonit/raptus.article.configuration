@@ -1,0 +1,49 @@
+Developer Manual
+================
+
+Note: You find a developer manual for raptus.article at 
+`raptus.article.core <http://pypi.python.org/pypi/raptus.article.core>`_.
+Please have look there if you need more information.
+
+Code overview
+=============
+
+Interfaces
+----------
+
+IConfigurableArticle
+````````````````````
+Marker interface for Articles with context-aware component
+configuration.
+
+Adapters
+--------
+
+PlacefulComponentsConfiguration
+```````````````````````````````
+Provides lookup of placeful Components configuration. It finds the
+configuration key by looking first on context, then on all parents
+in acquisition chain and lastly in portal_properties.
+
+Usage in raptus.article.* packages
+==================================
+
+Some of raptus.article.* packages do not yet support placeful configuration
+because they read configuration straight from portal_properties and not via
+IComponentsConfiguration provider.
+
+Updating them with support for placeful configuration is quite simple and is
+best shown with an example of getting gallery description in
+raptus.article.gallery::
+
+    - props = getToolByName(self.context, 'portal_properties').raptus_article
+    - return props.getProperty('gallery_%s_description' % self.type, False)
+    + from raptus.article.core.interfaces import IComponentsConfiguration
+    + return IComponentsConfiguration(self.context).get('gallery_%s_description' % self.type, False)
+
+After this change is done, configuration will still be read from
+portal_properties by default. To change configuration per-context, you need
+to install raptus.article.configuration and then add a 'gallery_%s_description'
+property to the Article of your choice.
+
+
