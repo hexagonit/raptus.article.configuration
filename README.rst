@@ -7,8 +7,7 @@ The following features for raptus.article are provided by this package:
 
 Interfaces
 ----------
-    * IConfigurableArticle (Marker interface for Articles with context-aware component
-    configuration)
+    * IConfigurableArticle (Marker interface for Articles with context-aware component configuration)
 
 Dependencies
 ------------
